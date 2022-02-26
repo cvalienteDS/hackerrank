@@ -1,0 +1,51 @@
+val in_dir = "listado-estaciones-completo.csv"
+val out_dir = "solution/01.csv"
+https://www.hackerrank.com/tests/cffsf8aaa21/login?b=eyJ1c2VybmFtZSI6Imthcmxvc3ZhbGllbnRlQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiZGFkZTg1YzAiLCJoaWRlIjp0cnVlLCJhY2NvbW1vZGF0aW9ucyI6eyJhZGRpdGlvbmFsX3RpbWVfcGVyY2VudCI6MH19
+spark.read.
+ option( "sep", ";" ).
+ csv( in_dir ).
+selectExpr( "PROVINCIA as state").
+ groupBy( "PROVINCIA" ).
+ count.alias("stations").
+ write.
+ mode( "overwrite" ).
+ csv( out_dir )
+ 
+ 
+val indir = "madrid_viajeros_por_franja_csv.csv"
+val out_dir = "solution/02.csv"
+
+spark.read.
+ option( "sep", ";" ).
+ csv( in_dir ).
+ createOrReplaceTempView( "ejer_02" )
+
+spark.sql("""
+SELECT NOMBRE_ESTACION AS description, NUCLEO_CERCANIAS as city, SUM(VIAJEROS_SUBIDOS + VIAJEROS_BAJADOS) AS total
+FROM ejer02
+WHERE TRAMO_HORARIO in ('08:00 - 08:30', '08:30 - 09:00', '09:00 - 09:30', '09:30 - 10:00')
+GROUP BY NOMBRE_ESTACION, NUCLEO_CERCANIAS
+""").
+ write.
+ mode( "overwrite" ).
+ csv( out_dir )
+ 
+ 
+val indir = "madrid_viajeros_por_franja_csv.csv"
+val out_dir = "solution/03.csv"
+
+val split_tramos = (x) => x.split(":").strip()
+val splitUDF = udf(split_tramos)
+
+spark.read.
+ option( "sep", ";" ).
+ csv( in_dir ).
+select(col(""),
+	col(""),
+	col(""),
+	col(""),
+	col(""),
+).
+ write.
+ mode( "overwrite" ).
+ csv( out_dir )
